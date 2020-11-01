@@ -28,6 +28,7 @@ api = tweepy.API(auth)
 tweet = api.get_status("967824267948773377", include_entities="true", include_ext_alt_text="true")
 print(tweet)
 
+print("\n")
 
 # In[129]:
 
