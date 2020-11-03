@@ -10,16 +10,20 @@
 # Imports
 ############################
 
+import configparser
 import pandas as pd
 import numpy as np
 import pickle
 
+
 ############################
 # Configuration Information
 ############################
+config = configparser.ConfigParser()
+config.read('../_config.ini')
 
-
-dataFile = "../Data/sample.csv"
+dataFile = config["RawData"]["FileName"]
+outputFile = config["NormData"]["FileName"]
 
 
 ############################
@@ -37,3 +41,10 @@ print(df)
 ############################
 # Save As Pickle File
 ############################
+
+with open(outputFile, "wb") as handle:
+    pickle.dump(df, handle)
+
+
+
+
