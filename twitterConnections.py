@@ -117,6 +117,7 @@ def getPopularTweetsFromTopic(query):
 # In[46]:
 
 
+
 #Get trends of particular place
 #WOEID of USA
 woied = 23424977
