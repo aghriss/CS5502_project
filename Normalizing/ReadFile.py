@@ -38,6 +38,29 @@ print(df)
 # Normalize
 ############################
 
+def normalizeData(df, normType):
+    for col in df.columns:
+        df[col] = normalizeCol(df[col], normType)
+    return df
+
+def normalizeCol(colData, type):
+    mean = colData.mean()
+    std = colData.std()
+    maxVal = colData.max()
+    minVal = colData.min()
+    newMax = 1
+    newMin = 0
+
+
+    if type == "z_score":
+        colData = (colData - mean) / std
+    elif type == "min_max":
+       colData = ((colData - minVal) * (newMax - newMin) / (maxVal - minVal)) + newMin
+
+    return colData
+
+df = normalizeData(df, "min_max")
+
 ############################
 # Save As Pickle File
 ############################
