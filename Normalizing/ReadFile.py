@@ -31,8 +31,13 @@ outputFile = config["NormData"]["FileName"]
 ############################
 
 df = pd.read_csv(dataFile)
-print(df)
 
+############################
+# Cleaning
+############################
+# Get rid of unneeded columns
+# Fix outliers
+df = df.drop(columns=['Unnamed: 0'])
 
 ############################
 # Normalize
