@@ -1,4 +1,3 @@
-
 ########################################################################
 # Project:  CSCI 5502 Data Mining Project
 # Name:     LogRegTrain.py
@@ -32,21 +31,20 @@ outputFile = config["Model"]["LogReg"]
 # Read File
 ############################
 
-df = pickle.load(open(dataFile,"rb"))
+data = pickle.load(open(dataFile,"rb"))
 
-############################
-# Split Data And Label
-############################
+xTrain = data[0]
+yTrain = data[1]
 
-data = df.drop(columns=['trending'])
-labels = df["trending"]
+xTest = data[2]
+yTest = data[3]
 
 ############################
 # Train Model
 ############################
 
 log_reg = LogisticRegression(multi_class="ovr",solver="lbfgs", C=.1, max_iter=10000,n_jobs=-1)
-log_reg.fit(data,labels)
+log_reg.fit(xTrain,yTrain)
 
 ############################
 # Save Model

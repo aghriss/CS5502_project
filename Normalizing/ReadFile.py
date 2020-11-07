@@ -25,6 +25,8 @@ config.read('../_config.ini')
 dataFile = config["RawData"]["FileName"]
 outputFile = config["NormData"]["FileName"]
 
+trainPercent = float(config["Eval"]["trainPercent"])
+
 
 ############################
 # Read File
@@ -67,11 +69,27 @@ def normalizeCol(colData, type):
 df = normalizeData(df, "min_max")
 
 ############################
+# Split the data
+############################
+
+data = df.drop(columns=['trending'])
+labels = df["trending"]
+cutOffTrain = (int)(trainPercent * len(data))
+
+
+xTrain = data[:cutOffTrain]
+yTrain = labels[:cutOffTrain]
+
+xTest = data[cutOffTrain:]
+yTest = labels[cutOffTrain:]
+
+
+############################
 # Save As Pickle File
 ############################
 
 with open(outputFile, "wb") as handle:
-    pickle.dump(df, handle)
+    pickle.dump([xTrain, yTrain, xTest, yTest], handle)
 
 
 
