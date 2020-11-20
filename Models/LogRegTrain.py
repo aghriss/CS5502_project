@@ -43,8 +43,21 @@ yTest = data[3]
 # Train Model
 ############################
 
-log_reg = LogisticRegression(multi_class="ovr",solver="lbfgs", C=.1, max_iter=10000,n_jobs=-1)
-log_reg.fit(xTrain,yTrain)
+class LogReg:
+    def __init__(self, xTrain,yTrain):
+        self.xTrain = xTrain
+        self.yTrain = yTrain
+        self.model = LogisticRegression(multi_class="ovr",solver="lbfgs", C=.1, max_iter=10000,n_jobs=-1)
+        self.model.fit(xTrain, yTrain)
+
+    def __init__(self, xTrain, yTrain, multiClass, solver, c, maxIter, nJobs):
+        self.xTrain = xTrain
+        self.yTrain = yTrain
+        self.model = LogisticRegression(multi_class=multiClass,solver=solver, C=c, max_iter=maxIter,n_jobs=nJobs)
+        self.model.fit(xTrain, yTrain)
+
+
+
 
 ############################
 # Save Model
