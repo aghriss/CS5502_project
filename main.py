@@ -19,9 +19,9 @@ from Normalizing.Split import Split
 from Models.LogRegTrain import LogReg
 from Evaluation.EvalModel import EvalModel
 
+from Models.DNN import DNN
+
 import configparser
-import pandas as pd
-import numpy as np
 import pickle
 
 
@@ -74,5 +74,10 @@ def LogRegEval():
     evalModel = EvalModel(logReg, xTest, yTest)
 
 
-LogRegModel()
-LogRegEval()
+
+
+xTrain, yTrain, xTest, yTest = ReadData(normDataFile)
+
+dnn = DNN()
+dnn.setData(xTrain, yTrain)
+dnn.fit()
