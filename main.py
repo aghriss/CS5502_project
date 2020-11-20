@@ -11,10 +11,13 @@
 # Imports
 ############################
 
-# from Models.LogRegTrain import LogReg
+
 from Normalizing.ReadFile import  ReadFile
 from Normalizing.Normalize import Normalize
 from Normalizing.Split import Split
+
+from Models.LogRegTrain import LogReg
+from Evaluation.EvalModel import EvalModel
 
 import configparser
 import pandas as pd
@@ -29,26 +32,47 @@ config = configparser.ConfigParser()
 config.read('./_config.ini')
 
 rawDataFile = config["RawData"]["FileName"]
-outputFile = config["NormData"]["FileName"]
-
+normDataFile = config["NormData"]["FileName"]
 trainPercent = float(config["Eval"]["trainPercent"])
 
+logRegModelFile = config["Model"]["LogReg"]
 
 
 def DumpPickle(fileName, data):
-    with open(outputFile, "wb") as handle:
+    with open(fileName, "wb") as handle:
         pickle.dump(data, handle)
 
 
-
-rf = ReadFile(rawDataFile)
-norm = Normalize(rf.df)
-split = Split(norm.df, trainPercent)
-print(split.xTrain)
-print(split.yTrain)
-print(split.xTest)
-print(split.yTest)
+def RawDataToNormData():
+    rf = ReadFile(rawDataFile)
+    norm = Normalize(rf.df)
+    split = Split(norm.df, trainPercent)
+    DumpPickle(normDataFile, [split.xTrain, split.yTrain, split.xTest, split.yTest])
 
 
+def ReadData(fileName):
+    data = pickle.load(open(fileName,"rb"))
+    xTrain = data[0]
+    yTrain = data[1]
 
-DumpPickle(outputFile, [split.xTrain, split.yTrain, split.xTest, split.yTest])
+    xTest = data[2]
+    yTest = data[3]
+    return xTrain, yTrain, xTest, yTest
+
+
+def LogRegModel():
+    xTrain, yTrain, xTest, yTest = ReadData(normDataFile)
+    logReg = LogReg()
+    logReg.setData(xTrain, yTrain)
+    logReg.fit()
+    DumpPickle(logRegModelFile, logReg.model)
+
+
+def LogRegEval():
+    xTrain, yTrain, xTest, yTest = ReadData(normDataFile)
+    logReg = pickle.load(open(logRegModelFile,"rb"))
+    evalModel = EvalModel(logReg, xTest, yTest)
+
+
+LogRegModel()
+LogRegEval()

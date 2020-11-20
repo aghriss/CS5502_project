@@ -90,11 +90,3 @@ nn_clf_history = nn_clf.fit_generator(nn_batch_generator(xTrain, yTrain, BATCH_S
 
 
 
-
-
-############################
-# Save Model
-############################
-
-with open(outputFile,"wb") as handle:
-    pickle.dump(nn_clf_history.history,handle)
