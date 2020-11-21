@@ -1,22 +1,11 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[38]:
-
-
-#packages
 import tweepy
 import json
 import importlib
 import saveData
-importlib.reload(saveData)
 from saveData import saveTweetData
 
 
-# In[24]:
 
-
-# Load credentials from json file
 with open("twitter_credentials.json", "r") as file:
     creds = json.load(file)
 
