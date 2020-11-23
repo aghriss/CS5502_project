@@ -16,10 +16,12 @@ from Normalizing.ReadFile import  ReadFile
 from Normalizing.Normalize import Normalize
 from Normalizing.Split import Split
 
-from Models.LogRegTrain import LogReg
-from Evaluation.EvalModel import EvalModel
+from Fitting.LogReg import LogRegModel
+from Predicting.LogReg import LogRegPred
 
-from Models.DNN import DNN
+from Evaluating.EvalModel import EvalModel
+
+from Fitting.DNN import DnnModel
 
 import configparser
 import pickle
@@ -36,19 +38,21 @@ normDataFile = config["NormData"]["FileName"]
 trainPercent = float(config["Eval"]["trainPercent"])
 
 logRegModelFile = config["Model"]["LogReg"]
+dnnModelFile = config["Model"]["Dnn"]
+
+logRegPredFile = config["Pred"]["LogReg"]
+dnnPredFile = config["Pred"]["Dnn"]
 
 
 def DumpPickle(fileName, data):
     with open(fileName, "wb") as handle:
         pickle.dump(data, handle)
 
-
 def RawDataToNormData():
     rf = ReadFile(rawDataFile)
     norm = Normalize(rf.df)
     split = Split(norm.df, trainPercent)
     DumpPickle(normDataFile, [split.xTrain, split.yTrain, split.xTest, split.yTest])
-
 
 def ReadData(fileName):
     data = pickle.load(open(fileName,"rb"))
@@ -60,24 +64,51 @@ def ReadData(fileName):
     return xTrain, yTrain, xTest, yTest
 
 
-def LogRegModel():
+
+
+
+def FitLogRegModel():
     xTrain, yTrain, xTest, yTest = ReadData(normDataFile)
-    logReg = LogReg()
+    logReg = LogRegModel()
     logReg.setData(xTrain, yTrain)
     logReg.fit()
     DumpPickle(logRegModelFile, logReg.model)
 
+def FitDnnModel():
+    xTrain, yTrain, xTest, yTest = ReadData(normDataFile)
+    dnn = DnnModel()
+    dnn.setData(xTrain, yTrain)
+    dnn.fit()
+    DumpPickle(dnnModelFile, dnn.model)
 
-def LogRegEval():
+
+
+
+
+def PredLogReg():
     xTrain, yTrain, xTest, yTest = ReadData(normDataFile)
     logReg = pickle.load(open(logRegModelFile,"rb"))
-    evalModel = EvalModel(logReg, xTest, yTest)
+    logRegPred = LogRegPred(logReg, xTest)
+    DumpPickle(logRegPredFile, logRegPred.yPred)
+
+def PredDnn():
+    pass
 
 
 
 
-xTrain, yTrain, xTest, yTest = ReadData(normDataFile)
 
-dnn = DNN()
-dnn.setData(xTrain, yTrain)
-dnn.fit()
+def EvalLogReg():
+    xTrain, yTrain, xTest, yTest = ReadData(normDataFile)
+    yPred = pickle.load(open(logRegPredFile,"rb"))
+    evalModel = EvalModel(yPred, yTest)
+
+def EvalDnn():
+    pass
+
+
+
+FitLogRegModel()
+PredLogReg()
+EvalLogReg()
+

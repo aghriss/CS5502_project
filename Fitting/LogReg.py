@@ -1,9 +1,7 @@
 ########################################################################
 # Project:  CSCI 5502 Data Mining Project
-# Name:     LogRegTrain.py
-# Purpose:  Read data from pickle file
-#           train a model on the data
-#           save the model
+# Name:     LogReg.py
+# Purpose:  Train a logistic regression model on given data
 ########################################################################
 
 ############################
@@ -17,7 +15,7 @@ from sklearn.linear_model import LogisticRegression
 # Train Model
 ############################
 
-class LogReg:
+class LogRegModel:
 
     def setData(self, xTrain,yTrain):
         self.xTrain = xTrain
