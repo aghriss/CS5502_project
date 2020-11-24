@@ -17,7 +17,7 @@ import csv
 def saveTweetData(topicName, tweetId, createdAt, text, retweetCount, likeCount, isQuote, place, geo, hashtags, 
                   userMentions, source, sourceUrl, userId, userName, userScreenName, userCreatedAt, userFollowersCount, 
                   userDescription, userVerified,userProtected, userLocation, userFriendsCount, userStatusesCount, 
-                  userListedCount):
+                  userListedCount, rawData):
     fileName = "data/"+topicName+".csv"
     if (os.path.isfile(fileName)):
         #print("filename", fileName, "again")
@@ -26,13 +26,13 @@ def saveTweetData(topicName, tweetId, createdAt, text, retweetCount, likeCount, 
             writer.writerow(["", tweetId, createdAt, text, retweetCount, likeCount, isQuote, place, geo, hashtags, 
                   userMentions, source, sourceUrl, userId, userName, userScreenName, userCreatedAt, userFollowersCount, 
                   userDescription, userVerified,userProtected, userLocation, userFriendsCount, userStatusesCount, 
-                  userListedCount])
+                  userListedCount, rawData])
     else :
         tweetDict = {'tweetId':tweetId, 'createdAt':createdAt, 'text':text, 'retweetCount':retweetCount, 'likeCount':likeCount, 'isQuote':isQuote, 
                   'place':place, 'hashtags':hashtags, 'userMentions':userMentions, 'source':source,'sourceUrl':sourceUrl, 
                  'userId':userId, 'userName':userName, 'userScreenName':userScreenName, 'userCreatedAt':userCreatedAt, 'userFollowersCount':userFollowersCount, 
                  'userDescription':userDescription, 'userVerified':userVerified,'userProtected':userProtected, 'userLocation':userLocation, 
-                 'userFriendsCount':userFriendsCount, 'userStatusesCount':userStatusesCount, 'userListedCount':userListedCount}
+                 'userFriendsCount':userFriendsCount, 'userStatusesCount':userStatusesCount, 'userListedCount':userListedCount, 'rawData':rawData}
         tweetDf = pd.DataFrame(tweetDict, index=[0])
         tweetDf.to_csv(fileName)
 
