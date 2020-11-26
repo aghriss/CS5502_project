@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[3]:
+# In[2]:
 
 
 #packages
@@ -10,7 +10,7 @@ import os.path
 import csv
 
 
-# In[8]:
+# In[6]:
 
 
 #Saving tweet data in csv
@@ -29,7 +29,7 @@ def saveTweetData(topicName, tweetId, createdAt, text, retweetCount, likeCount, 
                   userListedCount, rawData])
     else :
         tweetDict = {'tweetId':tweetId, 'createdAt':createdAt, 'text':text, 'retweetCount':retweetCount, 'likeCount':likeCount, 'isQuote':isQuote, 
-                  'place':place, 'hashtags':hashtags, 'userMentions':userMentions, 'source':source,'sourceUrl':sourceUrl, 
+                  'place':place, 'geo':geo, 'hashtags':hashtags, 'userMentions':userMentions, 'source':source,'sourceUrl':sourceUrl, 
                  'userId':userId, 'userName':userName, 'userScreenName':userScreenName, 'userCreatedAt':userCreatedAt, 'userFollowersCount':userFollowersCount, 
                  'userDescription':userDescription, 'userVerified':userVerified,'userProtected':userProtected, 'userLocation':userLocation, 
                  'userFriendsCount':userFriendsCount, 'userStatusesCount':userStatusesCount, 'userListedCount':userListedCount, 'rawData':rawData}
