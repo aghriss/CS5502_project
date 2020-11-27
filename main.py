@@ -5,29 +5,27 @@
 #           test, and evaluate NLP model
 ########################################################################
 
-
-
 ############################
 # Imports
 ############################
 import tensorflow as tf
+import configparser
+import pickle
 
-from Normalizing.ReadFile import  ReadFile
+
+from Normalizing.ReadFile import ReadFile
 from Normalizing.Normalize import Normalize
 from Normalizing.Split import Split
 
 from Fitting.LogReg import LogRegModel
 from Fitting.DNN import DnnModel
+from Fitting.RanFor import RanForModel
 
 from Predicting.LogReg import LogRegPred
 from Predicting.DNN import DnnPred
+from Predicting.RanFor import RanForPred
 
 from Evaluating.EvalModel import EvalModel
-
-
-
-import configparser
-import pickle
 
 
 ############################
@@ -44,9 +42,11 @@ trainPercent = float(config["Eval"]["trainPercent"])
 
 logRegModelFile = config["Model"]["LogReg"]
 dnnModelFile = config["Model"]["Dnn"]
+ranForModelFile = config["Model"]["RanFor"]
 
 logRegPredFile = config["Pred"]["LogReg"]
 dnnPredFile = config["Pred"]["Dnn"]
+ranForPredFile = config["Pred"]["RanFor"]
 
 
 def DumpPickle(fileName, data):
@@ -87,6 +87,12 @@ def FitDnnModel():
     dnn.fit()
     dnn.model.save(dnnModelFile)
 
+def FitRanFor():
+    xTrain, yTrain, xTest, yTest = ReadData(normSplitFile)
+    ranFor = RanForModel()
+    ranFor.setData(xTrain, yTrain)
+    ranFor.fit()
+    DumpPickle(ranForModelFile, ranFor.model)
 
 
 
@@ -104,6 +110,12 @@ def PredDnn():
     dnnPred = DnnPred(dnn, xTest)
     DumpPickle(dnnPredFile, dnnPred.yPred)
 
+def PredRanFor():
+    xTrain, yTrain, xTest, yTest = ReadData(normSplitFile)
+    ranFor = pickle.load(open(ranForModelFile,"rb"))
+    ranForPred = RanForPred(ranFor, xTest)
+    DumpPickle(ranForPredFile, ranForPred.yPred)
+
 
 
 
@@ -119,12 +131,13 @@ def EvalDnn():
     evalModel = EvalModel(yPred, yTest)
 
 
-RawDataToNormData()
-FitDnnModel()
-PredDnn()
-EvalDnn()
+def EvalRanFor():
+    xTrain, yTrain, xTest, yTest = ReadData(normSplitFile)
+    yPred = pickle.load(open(ranForPredFile, "rb"))
+    evalModel = EvalModel(yPred, yTest)
 
-FitLogRegModel()
-PredLogReg()
-EvalLogReg()
 
+
+FitRanFor()
+PredRanFor()
+EvalRanFor()
