@@ -64,19 +64,4 @@ class BigramExtractor:
 
 
 
-featureExt = FeatureExtractor("alice.txt", "queen.txt")
-feat = featureExt.features
-
-biExt = BigramExtractor()
-
-s = "I like ice cream."
-bigrams = biExt.getBigrams(s)
-featuresOn = []
-for b in bigrams:
-    if b in feat:
-        featuresOn.append(b)
-    else:
-        print(f'{b} not present')
-
-
 
