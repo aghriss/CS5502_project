@@ -6,12 +6,10 @@ warnings.filterwarnings(action='ignore')
 
 
 class FeatureExtractor:
-    def __init__(self, file1, file2):
+    def __init__(self, file1, file2, compareTop, numFeats):
         biExt = BigramExtractor()
         bigrams1 = biExt.getBigramsFromFile(file1)
         bigrams2 = biExt.getBigramsFromFile(file2)
-        compareTop = 700
-        numFeats = 100
 
         feat = self.getUniqFeat(bigrams1, bigrams2, compareTop, numFeats / 2)
         feat += self.getUniqFeat(bigrams2, bigrams1, compareTop, numFeats / 2)
