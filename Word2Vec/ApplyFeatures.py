@@ -33,6 +33,7 @@ class ApplyFeatures:
             for f in featFound:
                 df[f][i] = 1
 
+        df = df.drop(columns=[colName])
         # with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
         #     print(df)
 
