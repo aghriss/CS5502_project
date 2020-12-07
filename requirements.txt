@@ -1,0 +1,8 @@
+vaderSentiment
+textblob
+flair
+bs4
+emoji
+re
+nltk
+torch==1.16.0
