@@ -23,7 +23,7 @@ class FeatureExtractor:
     # This would mean that the item is common in bigrams1, but not in bigrams2 so it can be a good feature
     def getUniqFeat(self, bigrams1, bigrams2, compareTop, limit):
         features = []
-        for indX in range(compareTop):
+        for indX in range(min(compareTop, len(bigrams1))):
             x = bigrams1[indX]
             indY = len(bigrams2)
             try:

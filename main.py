@@ -130,7 +130,6 @@ def EvalDnn():
     yPred = pickle.load(open(dnnPredFile, "rb"))
     evalModel = EvalModel(yPred, yTest)
 
-
 def EvalRanFor():
     xTrain, yTrain, xTest, yTest = ReadData(normSplitFile)
     yPred = pickle.load(open(ranForPredFile, "rb"))
