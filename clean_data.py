@@ -7,6 +7,7 @@ from Word2Vec.bigram_features import extract_bigrams_from_corpus
 from Word2Vec.bigram_features import extract_bigrams_from_text, getUniqFeat
 import re
 import numpy as np
+import argparse
 
     
 def date_to_months(date_str):
@@ -15,6 +16,7 @@ def date_to_months(date_str):
     delta = relativedelta.relativedelta(datetime.datetime.now(), d0)
     full_months = (delta.years * 12) + delta.months
     return full_months
+
 def tweet_source(source):
     source = str(source)
     if "WEB" in source.upper():
@@ -55,10 +57,10 @@ def assemble_sentences(folder):
     return "\n".join(sentences)
                     
 
-def transform_data(folder, dest_folder):
+def transform_data(data_location, target_location):
     nlp_features = NLP.NLP_features()
-    files = os.listdir(folder)
-    corpus = assemble_sentences(folder)
+    files = os.listdir(data_location)
+    corpus = assemble_sentences(data_location)
     bigrams_corpus = extract_bigrams_from_corpus(corpus)
     df_combined = pd.DataFrame()
     
@@ -68,7 +70,7 @@ def transform_data(folder, dest_folder):
         if f.split(".")[0].split("_")[-1]=='popular':
             trending = 1
         try:
-            df = pd.read_csv(os.path.join(folder, f),index_col=0,encoding='utf-8')
+            df = pd.read_csv(os.path.join(data_location, f),index_col=0,encoding='utf-8')
         except:
             print("Error reading file %s"%f)
             continue
@@ -107,27 +109,32 @@ def transform_data(folder, dest_folder):
                  'polarity_positive', 'polarity_negative', 'polarity_compound']]
         
         df_combined = pd.concat([df_combined, df],axis=0)
-        
-    df_combined.to_csv(os.path.join("./", "merged_data.csv"),encoding = "utf-8")
+    
+    print("Saving merge.csv to %s"%target_location)
+    df_combined.to_csv(os.path.join(target_location, "merged_data.csv"),encoding = "utf-8")
             
 
-def merge_data(dest_folder):
-    files = os.listdir(dest_folder)
+def merge_data(target_location):
+    files = os.listdir(target_location)
     df = pd.DataFrame()
     for i,f in enumerate(files):
         print("Merging %i/%i, %s"%(i+1,len(files),f))
-        df2 = pd.read_csv(os.path.join(folder, f),index_col=0,encoding='utf-8')
+        df2 = pd.read_csv(os.path.join(target_location, f),index_col=0,encoding='utf-8')
         df = pd.concat([df,df2],axis=0)
-    df.to_csv(os.path.join(dest_folder, "merged_data.csv"),encoding = "utf-8")
+    df.to_csv(os.path.join(target_location, "merged_data.csv"),encoding = "utf-8")
     
 if __name__=="__main__":
-    folder = "./tweet_data"
-    dest_folder = "./cleaned_tweet_data"
+    parser = argparse.ArgumentParser(description='Tranform data and merge it')
+    parser.add_argument('--data_location', type=str,help='where data is located')
+    parser.add_argument('--target_location', type=str,help='where meregd data will be saved')
+    args = parser.parse_args()
+    data_location = args.data_location
+    target_location = args.target_location
     try:
-        os.mkdir(dest_folder)
+        os.mkdir(target_location)
     except:
-        print("Folder %s already exists"%dest_folder)
-    transform_data(folder, dest_folder)
+        print("Folder %s already exists"%target_location)
+    transform_data(data_location, target_location)
 
     
     
