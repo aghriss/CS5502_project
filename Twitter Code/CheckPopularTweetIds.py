@@ -8,9 +8,6 @@ import pandas as pd
 import numpy as np
 
 
-# In[68]:
-
-
 def checkPopularTweetIDs(topicName):
     df = pd.read_csv("data_m/"+topicName+".csv")
     df_popular = pd.read_csv("data_m/"+topicName+"_popular.csv")
@@ -20,13 +17,9 @@ def checkPopularTweetIDs(topicName):
     print(df['isPopular'].values)
 
 
-# In[66]:
-
 
 checkPopularTweetIDs("Thanksgiving")
 
-
-# In[ ]:
 
 
 

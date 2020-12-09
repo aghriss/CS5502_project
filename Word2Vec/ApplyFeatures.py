@@ -1,12 +1,10 @@
-
-
-
 from Word2Vec.FeatureExtractor import BigramExtractor
 import pandas as pd
 import pickle
 
 
 class ApplyFeatures:
+    
     def __init__(self, featureFile, csvFile, colName):
         self.df = self.applyFeatures(featureFile, csvFile, colName)
 
