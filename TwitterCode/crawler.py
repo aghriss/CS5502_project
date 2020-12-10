@@ -1,13 +1,14 @@
 import tweepy
 import json
-import importlib
-import saveData
-from saveData import saveTweetData
+#import importlib
+#import saveData
+#from saveData import saveTweetData
 import os
-with open("twitter_credentials.json", "r") as file:
-    creds = json.load(file)
-auth = tweepy.AppAuthHandler(creds['API_KEY'], creds['SECRET_KEY'])
-api = tweepy.API(auth)
+#with open("twitter_credentials.json", "r") as file:
+#    creds = json.load(file)
+#auth = tweepy.AppAuthHandler(creds['API_KEY'], creds['SECRET_KEY'])
+#api = tweepy.API(auth)
+import time
 
 
 def get_counts_quantile(tweets):
@@ -15,10 +16,10 @@ def get_counts_quantile(tweets):
     for t in tweets:
         counts.append()
 
-def save_result(result):
+def save_tweet(result):
     """Function to save tweepy result status"""
     pass
-def save_result_set(result_set):
+def save_user(result_set):
     """Function to save tweepy set fo result statuses"""
     pass
 
@@ -28,6 +29,7 @@ class TweetCrawler():
         
         assert os.path.exists(save_path)
         assert os.path.exists(credentials_path)
+        self.save_path = save_path
         self.location_id = 23424977
         try:
             with open(credentials_path,"r") as f:
@@ -73,19 +75,32 @@ class TweetCrawler():
         popular_tweets = self.api.search(query, count=500, result_type="recent")
         tuples = []
         for popular in popular_tweets:
-            user_timeline = self.api.user_timeline(popular.author.id, count=200)
+            user_timeline = self.get_user(popular.author.id)
             tuples.append([popular, user_timeline])
         return tuples
 
     def get_user(self, user_id):
-        pass
+        time.sleep(0.1)
+        return self.api.user_timeline(user_id, count=200)
 
-    
-    def store(self, tweets, trending):
-        pass
+    def save_user(self, user):
+        print("Saving user %s"%user.id_str)
+        json.dump(user._json, open(os.path.join(self.save_path, "user_"+user.id_str+".json"), 'w'))
+        
+    def save_tweet(self, tweet):
+        print("Saving tweet %s"%tweet.id_str)
+        json.dump(tweet._json, open(os.path.join(self.save_path, "tweet_"+ tweet.id_str+".json"), 'w'))
     
     def rate_status(self):
-        status = self.api.rate_limit_status()
+        state =  self.api.rate_limit_status()
+        limits = state['resources']['statuses']
+        return {'tweet':limits['/statuses/show/:id']['remaining'],
+                'users': limits['/statuses/user_timeline']['remaining']}
+    def get_tweet(self, tweet_id):
+        time.sleep(0.1)
+        return self.api.get_status(tweet_id)
+        
+        
 
 #crawler = TweetCrawler("twitter_credentials.json", './data')
 #self=crawler
