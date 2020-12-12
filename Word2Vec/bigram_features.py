@@ -1,5 +1,6 @@
 import nltk 
 
+# Extract bigrams from the sentences
 def extract_bigrams_from_corpus(sentences):
     #sample = open(fileName, "r", encoding="utf8")
     s =sentences# sample.read()    
@@ -20,7 +21,7 @@ def extract_bigrams_from_corpus(sentences):
         
     return d
 
-
+# Extract bigrams and put them in a sorted list
 def extract_bigrams_from_text(text):
     tokens = nltk.word_tokenize(text)
     bgs = nltk.bigrams(tokens)
@@ -31,7 +32,7 @@ def extract_bigrams_from_text(text):
     lst.sort(key=lambda x: -x[1])
     return  d
 
-    
+# Get unique features from the bigrams extracted
 def getUniqFeat(bigrams_text, bigrams_file, limit):
 
     frequency = []
