@@ -6,3 +6,4 @@ emoji
 re
 nltk
 torch==1.16.0
+pyfpgrowth

@@ -1,3 +1,7 @@
+'''
+Code for FP growth
+'''
+
 
 import pyfpgrowth
 import pandas as pd
@@ -6,11 +10,13 @@ df = pd.read_csv("merged_data.csv",index_col=0)
 
 import nltk
 from nltk import word_tokenize
+import numpy as np
 from nltk.util import ngrams
 from collections import Counter
 printable = set(string.printable)
 
 df.text = df.text.fillna("")
+label = 0
 
 def unicode(text):
     return "".join([t for t in text if t in printable])
@@ -38,10 +44,10 @@ text = "\n".join(list(df.text))
 
 text = text.replace('''!()-[]{};:'"\, <>./?@#$%^&*_~''', " ")
 words = ["and", "the", "to", "i", "with", "my", "is", "of", "it", "i", "be", "l", "ar", "ra", "you", "de", 'this', 'naughty', 'he',
-         'th','for','in', 'on','la','he','was','but','will','we','but','a','so','no',
+         'th','for','in', 'on','la','he','was','but','will','we','but','a','so','no','list',
              'st', 'com'] + [" "+c+" " for c in "0123456789abcdefghijklmnopqrstuvwxyz"]
    
-tweets = list(df.text.fillna("")[df.trending==0])
+tweets = list(df.text.fillna("")[df.trending==label])
 token = nltk.word_tokenize(text)
 token = list(filter(lambda x : x.lower() not in words, token))
 unigrams = dict(nltk.FreqDist((ngrams(token,1))))
@@ -62,8 +68,8 @@ bigrams = ngrams(token,3)
 
 
 
-patterns = pyfpgrowth.find_frequent_patterns(res, 40)
-rules = pyfpgrowth.generate_association_rules(patterns, 0.7)
+patterns = pyfpgrowth.find_frequent_patterns(res, 50)
+rules = pyfpgrowth.generate_association_rules(patterns, 0.5)
 
 def reverse_rule(rule):
     return [lst_reverse[r] for r in rule]

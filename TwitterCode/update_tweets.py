@@ -1,3 +1,7 @@
+'''
+Code used to update tweets
+'''
+
 import pandas as pd
 import os
 

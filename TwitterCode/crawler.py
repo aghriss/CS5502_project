@@ -1,13 +1,11 @@
+'''
+Twitter Crawler to get tweets and user data
+'''
+
 import tweepy
 import json
-#import importlib
-#import saveData
-#from saveData import saveTweetData
+
 import os
-#with open("twitter_credentials.json", "r") as file:
-#    creds = json.load(file)
-#auth = tweepy.AppAuthHandler(creds['API_KEY'], creds['SECRET_KEY'])
-#api = tweepy.API(auth)
 import time
 
 

@@ -3,8 +3,8 @@ import pandas as pd
 import os
 import datetime
 from dateutil import relativedelta
-from Word2Vec.bigram_features import extract_bigrams_from_corpus
-from Word2Vec.bigram_features import extract_bigrams_from_text, getUniqFeat
+from DataProcessing.bigram_features import extract_bigrams_from_corpus
+from DataProcessing.bigram_features import extract_bigrams_from_text, getUniqFeat
 import re
 import numpy as np
 import argparse
